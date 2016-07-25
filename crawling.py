@@ -6,19 +6,15 @@ from bs4 import BeautifulSoup as bs
 import config
 from selenium.webdriver.common.keys import Keys
 
-login_url = 'https://kulms.korea.ac.kr/'
-base_url = 'https://kulms.korea.ac.kr/webapps/gradebook/do/instructor/viewNeedsGrading?sortDir=ASCENDING&sortCol=attemptDate&numResults=25&course_id=_64035_1&pageIndex='
-file_path = '/home/jeonyoungbae/dev/downloadTA/files'
-
 def getURL(num):
-    return base_url+str(num)
+    return config.base_url+str(num)
 
 chromeoptions = webdriver.ChromeOptions()
 
-prefs = {'download.default_directory': file_path}
+prefs = {'download.default_directory': config.file_path}
 chromeoptions.add_experimental_option("prefs",prefs)
 driver = webdriver.Chrome(chrome_options=chromeoptions)
-driver.get(login_url)
+driver.get(config.login_url)
 
 field = driver.find_element_by_id('loginFormFields')
 user_id = driver.find_element_by_name('user_id')
@@ -32,8 +28,6 @@ while True:
     try:
         driver.get(getURL(idx))
         item = driver.find_element_by_id('controlpanel.grade.center_groupContents')
-
-        break
         items = driver.find_element_by_id('listContainer_databody')
         items = items.find_elements_by_tag_name('tr')
         item_folder = ''
